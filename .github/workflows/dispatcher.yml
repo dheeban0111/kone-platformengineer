@@ -17,7 +17,7 @@ jobs:
       - name: Install yq
         run: sudo apt-get install -y yq
 
-      - name: Read .ci-blueprint.yaml
+      - name: Read .ci.blueprint.yaml
         id: read
         run: |
           FILE=$(find samples -type f -name .ci.blueprint.yaml | head -n 1)
@@ -28,7 +28,6 @@ jobs:
           echo "Found blueprint: $FILE"
           STAGES=$(yq '.ci_stages | join(",")' "$FILE")
           echo "STAGES=$STAGES" >> $GITHUB_ENV
-
 
       - name: Set booleans for selected stages
         id: set
@@ -45,6 +44,6 @@ jobs:
     needs: read-blueprint
     uses: dheeban0111/kone-platformengineer/.github/workflows/py-ci.yml@main
     with:
-      run_lint: ${{ needs.read-blueprint.outputs.run_lint }}
-      run_test: ${{ needs.read-blueprint.outputs.run_test }}
-      run_docker: ${{ needs.read-blueprint.outputs.run_docker }}
+      run_lint: "${{ needs.read-blueprint.outputs.run_lint }}"
+      run_test: "${{ needs.read-blueprint.outputs.run_test }}"
+      run_docker: "${{ needs.read-blueprint.outputs.run_docker }}"
