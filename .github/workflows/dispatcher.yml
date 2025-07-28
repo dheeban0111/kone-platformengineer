@@ -20,7 +20,7 @@ jobs:
       - name: Read .ci-blueprint.yaml
         id: read
         run: |
-          FILE=$(find samples -type f -name .ci-blueprint.yaml | head -n 1)
+          FILE=$(find samples -type f -name .ci.blueprint.yaml | head -n 1)
           if [[ -z "$FILE" ]]; then
             echo "❌ No blueprint file found!"
             exit 1
