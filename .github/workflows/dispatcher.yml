@@ -44,6 +44,7 @@ jobs:
     needs: read-blueprint
     uses: dheeban0111/kone-platformengineer/.github/workflows/py-ci.yml@main
     with:
-      run_lint: "${{ needs.read-blueprint.outputs.run_lint }}"
-      run_test: "${{ needs.read-blueprint.outputs.run_test }}"
-      run_docker: "${{ needs.read-blueprint.outputs.run_docker }}"
+      run_lint: "${{ needs.read-blueprint.outputs.run_lint == 'true' && 'true' || 'false' }}"
+      run_test: "${{ needs.read-blueprint.outputs.run_test == 'true' && 'true' || 'false' }}"
+      run_docker: "${{ needs.read-blueprint.outputs.run_docker == 'true' && 'true' || 'false' }}"
+
