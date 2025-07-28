@@ -1,13 +1,7 @@
 name: CI Dispatcher
 
 on:
-  pull_request:
-    paths:
-      - 'samples/**'
-  push:
-    branches: [main]
-    paths:
-      - 'samples/**'
+  workflow_dispatch:
 
 jobs:
   read-blueprint:
