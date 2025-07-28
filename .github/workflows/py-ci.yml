@@ -1,4 +1,4 @@
-name: Python CI Workflow
+name: Py CI workflow
 
 on:
   workflow_call:
