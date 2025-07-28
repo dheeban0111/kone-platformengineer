@@ -1,0 +1,51 @@
+name: CI Dispatcher
+
+on:
+  pull_request:
+    paths:
+      - 'samples/**'
+  push:
+    branches: [main]
+    paths:
+      - 'samples/**'
+
+jobs:
+  read-blueprint:
+    runs-on: ubuntu-latest
+    outputs:
+      run_lint: ${{ steps.set.outputs.run_lint }}
+      run_test: ${{ steps.set.outputs.run_test }}
+      run_docker: ${{ steps.set.outputs.run_docker }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        run: sudo apt-get install -y yq
+
+      - name: Read .ci-blueprint.yaml
+        id: read
+        run: |
+          FILE=$(find samples -name .ci-blueprint.yaml | head -n 1)
+          echo "Found blueprint: $FILE"
+          STAGES=$(yq '.ci_stages | join(",")' "$FILE")
+          echo "STAGES=$STAGES" >> $GITHUB_ENV
+
+      - name: Set booleans for selected stages
+        id: set
+        run: |
+          echo "run_lint=false" >> $GITHUB_OUTPUT
+          echo "run_test=false" >> $GITHUB_OUTPUT
+          echo "run_docker=false" >> $GITHUB_OUTPUT
+
+          [[ "$STAGES" == *"lint"* ]] && echo "run_lint=true" >> $GITHUB_OUTPUT
+          [[ "$STAGES" == *"test"* ]] && echo "run_test=true" >> $GITHUB_OUTPUT
+          [[ "$STAGES" == *"dockerize"* ]] && echo "run_docker=true" >> $GITHUB_OUTPUT
+
+  run-python-ci:
+    needs: read-blueprint
+    uses: ./.github/workflows/python/python-ci.yml
+    with:
+      run_lint: ${{ needs.read-blueprint.outputs.run_lint }}
+      run_test: ${{ needs.read-blueprint.outputs.run_test }}
+      run_docker: ${{ needs.read-blueprint.outputs.run_docker }}

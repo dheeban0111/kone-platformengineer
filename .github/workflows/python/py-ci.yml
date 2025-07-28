@@ -1,0 +1,67 @@
+name: Python CI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      run_lint:
+        required: false
+        type: boolean
+        default: true
+      run_test:
+        required: false
+        type: boolean
+        default: true
+      run_docker:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  lint:
+    if: ${{ inputs.run_lint }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install flake8
+        run: pip install flake8
+
+      - name: Run flake8
+        run: flake8 samples/python-templates || echo "⚠️ Lint warnings (non-blocking)"
+
+  test:
+    if: ${{ inputs.run_test }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r samples/python-templates/requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: pytest samples/python-templates/test-main.py
+
+  dockerize:
+    if: ${{ inputs.run_docker }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t demo/python-app:latest samples/python-templates

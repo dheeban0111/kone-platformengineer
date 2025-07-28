@@ -1,29 +1,27 @@
-# 🛠️Blueprint-Driven CI/CD Framework
+# 🚀 Kone Ci/Cd Blueprint Framework – Platform Engineering POC
 
-This repository demonstrates a modular, scalable, and tech-agnostic CI/CD framework using **GitHub Actions** and a **blueprint-driven approach**.
-
-The goal is to standardize build and deployment pipelines across multiple languages and tech stacks using a single source of truth — the `.ci-blueprint.yaml`.
+This repo demonstrates a **dynamic, GitHub Actions-based CI/CD framework** that generates pipelines automatically from a centralized configuration (`.ci-blueprint.yaml`). It supports multiple tech stacks and deployment methods via a shared, modular template strategy.
 
 ---
 
-## 🚀 How It Works
+## 📌 Objective
 
-### 📁 1. Project Setup
+Build a **standardized and extensible CI/CD system** that:
 
-Every application repository must include a `.ci-blueprint.yaml` file that defines:
-- Tech stack (Python, Java, Node, etc.)
-- Build tool (pip, Maven, npm, etc.)
-- CI stages to run (lint, test, dockerize, etc.)
-- Deployment method (Docker, SAM, CDK, etc.)
-- Branching strategy (semver, trunk-based, etc.)
+- ✅ Supports **multiple tech stacks** (Python, Node, Java, etc.)
+- ✅ Handles different **build tools** (pip, npm, Maven, etc.)
+- ✅ Dynamically creates stages based on a config file
+- ✅ Applies consistent **branching/tagging rules**
+- ✅ Is easy to **extend**, maintain, and scale across teams
 
-``` Example yaml format
-tech_stack: python
-build_tool: pip
-ci_stages:
-  - lint
-    - test
-      - dockerize
-      deploy_method: docker
-      branch_strategy: semver
-      
+---
+
+## 🧠 How It Works
+
+```mermaid
+flowchart TD
+  A[PR Raised / Push to Main] --> B[Dispatcher Workflow]
+  B --> C[Read .ci-blueprint.yaml]
+  C --> D[Identify tech_stack & ci_stages]
+  D --> E[Trigger Python CI Workflow]
+  E --> F[Run selected stages: Lint → Test → Dockerize]
