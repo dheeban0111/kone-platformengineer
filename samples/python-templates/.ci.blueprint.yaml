@@ -1,0 +1,8 @@
+tech_stack: python
+build_tool: pip
+ci_stages:
+  - lint
+  - test
+  - dockerize
+deploy_method: docker
+branch_strategy: semver
