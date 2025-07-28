@@ -21,9 +21,14 @@ jobs:
         id: read
         run: |
           FILE=$(find samples -name .ci-blueprint.yaml | head -n 1)
+          if [[ -z "$FILE" ]]; then
+            echo "❌ No blueprint file found!"
+            exit 1
+          fi
           echo "Found blueprint: $FILE"
           STAGES=$(yq '.ci_stages | join(",")' "$FILE")
           echo "STAGES=$STAGES" >> $GITHUB_ENV
+
 
       - name: Set booleans for selected stages
         id: set
