@@ -53,7 +53,7 @@ jobs:
           pip install pytest
 
       - name: Run tests
-        run: pytest samples/python-templates/test-main.py
+        run: pytest samples/python-templates/test_main.py
 
   dockerize:
     if: ${{ inputs.run_docker }}
