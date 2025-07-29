@@ -47,6 +47,6 @@ jobs:
       run_lint: ${{ needs.read-blueprint.outputs.run_lint == 'true' }}
       run_test: ${{ needs.read-blueprint.outputs.run_test == 'true' }}
       run_docker: ${{ needs.read-blueprint.outputs.run_docker == 'true' }}
-    secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    secrets: inherit
+      # DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      # DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
