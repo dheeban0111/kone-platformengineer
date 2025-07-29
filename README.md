@@ -20,8 +20,8 @@ Build a **standardized and extensible CI/CD system** that:
 
 ```mermaid
 flowchart TD
-  A[PR Raised / Push to Main] --> B[Dispatcher Workflow]
+  A[Trigger a manual run on CI dispatcher workflow] --> B[Dispatcher Workflow]
   B --> C[Read .ci-blueprint.yaml]
-  C --> D[Identify tech_stack & ci_stages]
-  D --> E[Trigger Python CI Workflow]
+  C --> D[Identify tech_stack & ci stages]
+  D --> E[Python CI Workflow gets triggerd automatically]
   E --> F[Run selected stages: Lint → Test → Dockerize]
